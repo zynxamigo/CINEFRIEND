@@ -6,7 +6,7 @@ const crypto = require("crypto");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, { cors: { origin: process.env.CLIENT_URL || true, methods: ["GET", "POST"] } });
 const PORT = Number(process.env.PORT) || 3000;
 const rooms = new Map();
 
