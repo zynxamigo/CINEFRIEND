@@ -38,3 +38,15 @@ Use hospedagem Node.js com WebSockets, configure PORT e use HTTPS.
 5. Antes de armazenar dados privados, configure políticas Row Level Security (RLS) e valide as permissões no servidor.
 
 A página de login é apenas uma interface até que o Supabase seja configurado. O login no navegador, sozinho, **não protege páginas estáticas, o código-fonte público ou os eventos do servidor**. Para proteger salas e dados, o servidor Node.js deve validar a sessão/token e autorizar cada ação. Nunca exponha a chave `service_role`, credenciais de banco ou segredos em arquivos frontend.
+
+### Publicar o servidor de salas
+
+O GitHub Pages serve apenas o frontend. Para habilitar salas compartilhadas:
+
+1. Crie um serviço web Node.js no Render a partir deste repositório: https://render.com/
+2. Configure **Root Directory** como vazio (raiz do repositório), **Build Command** `npm install` e **Start Command** `npm start`.
+3. Depois que o Render gerar a URL HTTPS do serviço, abra `frontend/server-config.js` e defina `window.CINEFRIEND_SERVER_URL` com essa URL (sem barra final), por exemplo `https://seu-servico.onrender.com`.
+4. Faça commit da alteração. O GitHub Pages atualizará o frontend.
+5. No Render, defina a variável de ambiente `CLIENT_URL` para `https://zynxamigo.github.io` e publique novamente.
+
+O plano gratuito do provedor pode suspender o serviço após inatividade; a primeira conexão pode demorar. Salas ficam em memória e desaparecem quando o servidor reinicia. Este procedimento ativa o servidor de salas, mas não substitui autenticação e autorização para recursos privados.
