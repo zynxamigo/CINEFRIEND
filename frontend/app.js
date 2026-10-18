@@ -1,6 +1,7 @@
 (() => {
 const $ = id => document.getElementById(id);
-const socket = typeof window.io === "function" ? window.io() : { on(){}, emit(){ toast("Salas sincronizadas precisam do servidor CINEFRIEND ativo."); } };
+const serverUrl = String(window.CINEFRIEND_SERVER_URL || "").trim().replace(/\/$/, "");
+const socket = typeof window.io === "function" && serverUrl ? window.io(serverUrl, { transports: ["websocket", "polling"] }) : { connected:false, on(){}, emit(_event,_data,callback){ const message = serverUrl ? "Não foi possível conectar ao servidor. Ele pode estar dormindo ou ainda não foi publicado." : "O servidor ainda não foi configurado. Veja frontend/server-config.js e o README."; if(typeof callback==="function") callback({ok:false,error:message}); else toast(message); } };
 const palette = ["#48305e","#264b58","#684044","#394b3a","#5b3f70","#34405e","#70502f","#3f3a68","#3d5d61","#63364e"];
 const demo = [
  ["Aurora","Filmes","DRAMA","AU","#49305d"],["Último Horizonte","Filmes","AVENTURA","UH","#315365"],["Cidade Neon","Filmes","SCI-FI","CN","#6b354d"],["Além do Tempo","Séries","FANTASIA","AT","#355344"],
